@@ -43,17 +43,16 @@ function clearAlerts() {
     $('.alert').remove();
 }
 
-function getInputField(index) {
-    return `<div class="form-group"><label class="col-md-1 control-label">${index}</label><div class="col-md-10"><input type="number" name="values[]" class="form-control" required></div><div class="col-md-1"><button type="button" class="btn btn-danger delete-value"><span class="glyphicon glyphicon-trash"></span></button></div></div>`;
+function getInputField() {
+    return `<div class="form-group"><div class="col-md-10"><input type="number" name="values[]" class="form-control" required></div><div class="col-md-2"><button type="button" class="btn btn-danger delete-value"><span class="glyphicon glyphicon-trash"></span></button></div></div>`;
 }
 
 $(document).ready(function () {
     let randomValueForm = $('#random-value-form');
     let addValueButton = randomValueForm.find('.add-value');
     let formContainer = randomValueForm.find('.form-container');
-    let index = 1;
     addValueButton.click(function () {
-        formContainer.append(getInputField(index++));
+        formContainer.append(getInputField());
     });
     $(document).on('click', '.delete-value', function () {
         $(this).closest('.form-group').remove();

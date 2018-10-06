@@ -27,10 +27,15 @@ class FileHelper
      * Получить данные из файла
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function getData()
     {
-        return json_decode(file_get_contents(static::getPathFileData()));
+        if ($data = json_decode(file_get_contents(static::getPathFileData()))) {
+            return $data;
+        }
+
+        throw new \Exception('Нет значений случайной величины.');
     }
 
     /**

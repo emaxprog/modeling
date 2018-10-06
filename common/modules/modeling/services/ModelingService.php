@@ -31,6 +31,16 @@ class ModelingService
     }
 
     /**
+     * Получить значения
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
      * Выборочное среднее или оценка математического ожидания
      *
      * @return float|int
@@ -158,20 +168,49 @@ class ModelingService
         foreach ($this->statisticRange() as $key => $value) {
             if (!$i++) {
                 $values[$this->values[$i]] = 0;
-//                $values[] = [
-//                    'value' => $this->values[$i],
-//                    'functionValue' => 0
-//                ];
             } else {
                 $values[$this->values[$i]] = $oldVal + $this->statisticRange()[$key];
-
-//                $values[] = [
-//                    'value' => $value,
-//                    'functionValue' => $oldVal + $this->statisticRange()[$key]
-//                ];
                 $oldVal = $values[$this->values[$i]];
             }
         }
         return $values;
+    }
+
+    /**
+     * Коэффициент ассиметрии
+     *
+     * @return float|int
+     */
+    public function asymmetryCoefficient()
+    {
+        $sum = 0;
+        foreach ($this->values as $value) {
+            $sum += pow($value - $this->average(), 3);
+        }
+        return $sum / ((count($this->values) - 1) * pow($this->standardDeviation(), 3));
+    }
+
+    /**
+     * Эксцесс
+     *
+     * @return float|int
+     */
+    public function excess()
+    {
+        $sum = 0;
+        foreach ($this->values as $value) {
+            $sum += pow($value - $this->average(), 4);
+        }
+        return ($sum / ((count($this->values) - 1) * pow($this->standardDeviation(), 4))) - 3;
+    }
+
+    /**
+     * Нормальный закон распределения?
+     *
+     * @return bool
+     */
+    public function isNormalLaw()
+    {
+        return !($this->asymmetryCoefficient() && $this->excess());
     }
 }
