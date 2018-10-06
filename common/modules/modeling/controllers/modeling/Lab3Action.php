@@ -15,10 +15,9 @@ use common\modules\modeling\helpers\FileHelper;
 use common\modules\modeling\services\ModelingService;
 
 /**
- * Class Lab2Action
- * @package common\modules\modeling\controllers\modeling
+ * Класс действие для получения списка советов
  */
-class Lab2Action extends Action
+class Lab3Action extends Action
 {
     /**
      * @var ModelingService
@@ -26,7 +25,7 @@ class Lab2Action extends Action
     protected $service;
 
     /**
-     * Действие для вывода Лабораторной работы №2
+     * Действие для вывода Лабораторной работы №3
      *
      * @return string|\yii\web\Response
      * @throws \yii\base\Exception
@@ -34,10 +33,12 @@ class Lab2Action extends Action
     public function run()
     {
         try {
-            $this->service = new ModelingService(FileHelper::getData());
-            return $this->controller->render('lab2', [
+            $this->service = new ModelingService(FileHelper::getData(), FileHelper::getLaplasTable());
+            $probabilities = $this->service->calculateProbabilities();
+            return $this->controller->render('lab3', [
                 'values' => $this->service->getValues(),
-                'isNormalLaw' => $this->service->isNormalLaw()
+                'ranges' => array_keys($probabilities),
+                'probabilities' => array_values($probabilities)
             ]);
         } catch (\Exception $e) {
             throw new NotFoundHttpException($e->getMessage());

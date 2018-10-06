@@ -10,20 +10,13 @@ namespace common\modules\modeling\controllers\modeling;
 
 use Yii;
 use yii\base\Action;
-use yii\web\Controller;
 
 /**
- * Класс действие для получения списка советов
+ * Class IndexAction
+ * @package common\modules\modeling\controllers\modeling
  */
 class IndexAction extends Action
 {
-    protected $service;
-
-    public function __construct($id, Controller $controller, array $config = [])
-    {
-        parent::__construct($id, $controller, $config);
-    }
-
     /**
      * Действие для вывода списка лабораторных работ
      *

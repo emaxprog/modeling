@@ -22,12 +22,21 @@ class ModelingService
     protected $values;
 
     /**
+     * Таблица функции Лапласа
+     *
+     * @var array
+     */
+    protected $laplasTable;
+
+    /**
      * ModelingService constructor.
      * @param $values
+     * @param $laplasTable
      */
-    public function __construct($values)
+    public function __construct($values, $laplasTable = null)
     {
         $this->values = $values;
+        $this->laplasTable = $laplasTable;
     }
 
     /**
@@ -202,6 +211,39 @@ class ModelingService
             $sum += pow($value - $this->average(), 4);
         }
         return ($sum / ((count($this->values) - 1) * pow($this->standardDeviation(), 4))) - 3;
+    }
+
+    /**
+     * Координаты диапазонов
+     *
+     * @return array
+     */
+    public function coordinatesOfRanges()
+    {
+        return array_keys($this->statisticRange());
+    }
+
+    /**
+     * Вычислить вероятности попадания случайной величины на заданный участок
+     *
+     * @return array
+     */
+    public function calculateProbabilities()
+    {
+        $result = [];
+        foreach ($this->coordinatesOfRanges() as $coordinates) {
+            list($leftBorder, $rightBorder) = explode('-', $coordinates);
+            $laplasValueRightBorder = abs(round(($rightBorder - $this->average()) / $this->dispersionEstimate(), 2));
+            $laplasValueRightBorder = is_int($laplasValueRightBorder) ? $laplasValueRightBorder . '.00' : (string)$laplasValueRightBorder;
+            $laplasValueRightBorder = strlen($laplasValueRightBorder) == 4 ? $laplasValueRightBorder : $laplasValueRightBorder . '0';
+            $laplasValueLeftBorder = abs(round(($leftBorder - $this->average()) / $this->dispersionEstimate(), 2));
+            $laplasValueLeftBorder = is_int($laplasValueLeftBorder) ? $laplasValueLeftBorder . '.00' : (string)$laplasValueLeftBorder;
+            $laplasValueLeftBorder = strlen($laplasValueLeftBorder) == 4 ? $laplasValueLeftBorder : $laplasValueLeftBorder . '0';
+            $fb = $this->laplasTable[$laplasValueRightBorder < 5 ? $laplasValueRightBorder : 5];
+            $fa = $this->laplasTable[$laplasValueLeftBorder < 5 ? $laplasValueLeftBorder : 5];
+            $result[$coordinates] = abs($fb - $fa);
+        }
+        return $result;
     }
 
     /**

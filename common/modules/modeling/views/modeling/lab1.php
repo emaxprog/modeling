@@ -1,11 +1,5 @@
-<?php
-/* @var $this yii\web\View */
-
-use yii\web\View;
-
-?>
 <div class="jumbotron">
-    <h1>Моделирование</h1>
+    <h1>Лабораторная работа №1</h1>
 </div>
 <form id="random-value-form" action="<?= \yii\helpers\Url::to(['/lab1']) ?>" method="post" enctype='multipart/form-data'>
     <div class="form-container form-horizontal"></div>

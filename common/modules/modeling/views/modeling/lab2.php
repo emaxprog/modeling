@@ -1,11 +1,10 @@
 <?php
-/* @var $this yii\web\View */
 /* @var $values array */
 /* @var $isNormalLaw boolean */
 
 ?>
 <div class="jumbotron">
-    <h1>Моделирование</h1>
+    <h1>Лабораторная работа №2</h1>
 </div>
 <table class="table table-striped">
     <caption>Выборочные данные случайной величины</caption>

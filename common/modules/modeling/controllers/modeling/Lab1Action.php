@@ -10,22 +10,20 @@ namespace common\modules\modeling\controllers\modeling;
 
 use Yii;
 use yii\base\Action;
-use yii\web\Controller;
 use common\modules\modeling\helpers\FileHelper;
 use common\modules\modeling\forms\RandomValueForm;
 use common\modules\modeling\services\ModelingService;
 
 /**
- * Класс действие для получения списка советов
+ * Class Lab1Action
+ * @package common\modules\modeling\controllers\modeling
  */
 class Lab1Action extends Action
 {
+    /**
+     * @var ModelingService
+     */
     protected $service;
-
-    public function __construct($id, Controller $controller, array $config = [])
-    {
-        parent::__construct($id, $controller, $config);
-    }
 
     /**
      * Действие для вывода Лабораторной работы №1
