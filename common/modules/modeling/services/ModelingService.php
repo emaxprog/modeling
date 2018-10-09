@@ -22,21 +22,23 @@ class ModelingService
     protected $values;
 
     /**
-     * Таблица функции Лапласа
+     * Таблица Пирсона
      *
      * @var array
      */
-    protected $laplasTable;
+    protected $pirsonTable;
 
     /**
      * ModelingService constructor.
      * @param $values
      * @param $laplasTable
+     * @param $pirsonTable
      */
-    public function __construct($values, $laplasTable = null)
+    public function __construct($values, $laplasTable = null, $pirsonTable = null)
     {
         $this->values = $values;
         $this->laplasTable = $laplasTable;
+        $this->pirsonTable = $pirsonTable;
     }
 
     /**
@@ -142,6 +144,30 @@ class ModelingService
     }
 
     /**
+     * Частоты
+     *
+     * @return array
+     */
+    public function frequencies()
+    {
+        $frequencies = [];
+        $coordinates = $this->coordinates();
+        for ($i = 0; $i < count($coordinates); $i++) {
+            if (!isset($coordinates[$i + 1])) {
+                break;
+            }
+            $count = 0;
+            foreach ($this->values as $value) {
+                if ($value >= $coordinates[$i] && $value <= $coordinates[$i + 1]) {
+                    $count++;
+                }
+            }
+            $frequencies[] = $count;
+        }
+        return $frequencies;
+    }
+
+    /**
      * Эмпирический закон
      *
      * @return array
@@ -244,6 +270,17 @@ class ModelingService
             $result[$coordinates] = abs($fb - $fa);
         }
         return $result;
+    }
+
+    public function isNormalLawByPirson()
+    {
+        $i = 0;
+        $sum = 0;
+        $frequencies = $this->frequencies();
+        foreach ($this->calculateProbabilities() as $key => $value) {
+            $sum += pow($frequencies[$i] - count($this->values) * $value, 2) / count($this->values) * $value;
+        }
+        $x2= $sum;
     }
 
     /**

@@ -12,6 +12,10 @@ body {
     font-size: 36px;
 }
 
+#random-value-form{
+    margin-bottom: 40px;
+}
+
 .chart__container {
     margin-top: 40px;
     width: 100%;

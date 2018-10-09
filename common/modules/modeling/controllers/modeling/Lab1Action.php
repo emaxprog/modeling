@@ -40,9 +40,14 @@ class Lab1Action extends Action
             }
             try {
                 $this->service = new ModelingService(FileHelper::getData());
+                $statisticRange = $this->service->statisticRange();
                 return $this->controller->asJson([
-                    'statisticRange' => $this->service->statisticRange(),
+                    'statisticRange' => $statisticRange,
                     'statisticFunction' => $this->service->statisticFunction(),
+                    'statisticRangeTable' =>$this->controller->renderPartial('lab1_table',[
+                        'ranges' => array_keys($statisticRange),
+                        'frequencies' => array_values($statisticRange)
+                    ])
                 ]);
             } catch (\Exception $e) {
                 Yii::$app->response->statusCode = 403;

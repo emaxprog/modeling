@@ -44,7 +44,20 @@ function clearAlerts() {
 }
 
 function getInputField() {
-    return `<div class="form-group"><div class="col-md-10"><input type="number" name="values[]" class="form-control" required></div><div class="col-md-2"><button type="button" class="btn btn-danger delete-value"><span class="glyphicon glyphicon-trash"></span></button></div></div>`;
+    return `<div class="row">
+                      <div class="col-md-11">
+                        <div class="form-group">
+                          <input type="number" name="values[]" class="form-control" required>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="form-group">
+                           <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm delete-value">
+                                <i class="material-icons">close</i>
+                           </button>
+                        </div>
+                      </div>
+                    </div>`;
 }
 
 $(document).ready(function () {
@@ -55,15 +68,15 @@ $(document).ready(function () {
         formContainer.append(getInputField());
     });
     $(document).on('click', '.delete-value', function () {
-        $(this).closest('.form-group').remove();
+        $(this).closest('.row').remove();
     });
-
 
     $submitBtn = $('form .btn');
     $chartContainer = $('.chart__container');
     $('form').submit(function (e) {
         e.preventDefault();
         clearAlerts();
+        $(this).find('+.col-md-12').remove();
         $submitBtn.button('loading');
         let form = $(this),
             formAction = form.attr('action'),
@@ -86,6 +99,7 @@ $(document).ready(function () {
                 });
                 $submitBtn.button('reset');
                 $chartContainer.show();
+                $chartContainer.before(result['statisticRangeTable']);
                 google.charts.setOnLoadCallback(drawStatisticRange(statisticRangeData));
                 google.charts.setOnLoadCallback(drawStatisticFunction(statisticFunctionData));
             },

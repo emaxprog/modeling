@@ -2,8 +2,8 @@
 
 namespace common\modules\modeling\helpers;
 
-use SplFileObject;
 use Yii;
+use SplFileObject;
 
 /**
  * Class FileHelper
@@ -13,6 +13,7 @@ class FileHelper
 {
     const RANDOM_VALUES_FILE = 'values.json';
     const LAPLAS_TABLE = 'laplass_values.csv';
+    const PIRSON_TABLE = 'pirson_values.csv';
 
     /**
      * Сохранение данных в json
@@ -74,6 +75,35 @@ class FileHelper
         $file = new SplFileObject(static::getPathToData() . DIRECTORY_SEPARATOR . static::LAPLAS_TABLE);
         while ($row = $file->fgetcsv(',')) {
             $data[$row[0]] = (float)$row[1];
+        }
+
+        if ($data) {
+            return $data;
+        }
+
+        throw new \Exception('Нет таблицы функции Лапласа.');
+    }
+
+    /**
+     * Получить таблицу функции Лапласа
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public static function getPirsonTable()
+    {
+        $data = [];
+        $names = [];
+        $file = new SplFileObject(static::getPathToData() . DIRECTORY_SEPARATOR . static::PIRSON_TABLE);
+        $j = 0;
+        while ($row = $file->fgetcsv(',')) {
+            if (!$j++) {
+                $names = $row;
+                continue;
+            }
+            for ($i = 0; $i < 6; $i++) {
+                $data[$row[0] . '-' . (float)$names[1 + $i]] = (float)$row[1 + $i];
+            }
         }
 
         if ($data) {

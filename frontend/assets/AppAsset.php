@@ -13,12 +13,22 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-    ];
-    public $js = [
-        'js/script.js'
+        'https://www.gstatic.com/charts/loader.js',
+        'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css',
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons',
+        'css/material-dashboard.css?v=2.1.0',
+        'demo/demo.css',
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+    ];
+    public $js = [
+        'https://www.gstatic.com/charts/loader.js',
+        'js/script.js',
+        'js/core/jquery.min.js',
+        'js/core/popper.min.js',
+        'js/core/bootstrap-material-design.min.js',
+        'js/material-dashboard.min.js',
+        'demo/demo.js',
     ];
 }

@@ -44,7 +44,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '/' => 'modeling/modeling/index',
+                '/' => 'modeling/modeling/lab1',
                 '<action>' => 'modeling/modeling/<action>'
             ],
         ],
