@@ -22,6 +22,13 @@ class ModelingService
     protected $values;
 
     /**
+     * Частоты
+     *
+     * @var array
+     */
+    protected $frequenciesTimes;
+
+    /**
      * Таблица Пирсона
      *
      * @var array
@@ -29,16 +36,28 @@ class ModelingService
     protected $pirsonTable;
 
     /**
+     * @var array
+     */
+    protected $laplasTable;
+
+    /**
+     * @var array
+     */
+    protected $fisherTable;
+
+    /**
      * ModelingService constructor.
      * @param $values
      * @param $laplasTable
      * @param $pirsonTable
+     * @param $fisherTable
      */
-    public function __construct($values, $laplasTable = null, $pirsonTable = null)
+    public function __construct($values, $laplasTable = null, $pirsonTable = null, $fisherTable = null)
     {
         $this->values = $values;
         $this->laplasTable = $laplasTable;
         $this->pirsonTable = $pirsonTable;
+        $this->fisherTable = $fisherTable;
     }
 
     /**
@@ -150,21 +169,17 @@ class ModelingService
      */
     public function frequencies()
     {
-        $frequencies = [];
-        $coordinates = $this->coordinates();
-        for ($i = 0; $i < count($coordinates); $i++) {
-            if (!isset($coordinates[$i + 1])) {
-                break;
-            }
-            $count = 0;
-            foreach ($this->values as $value) {
-                if ($value >= $coordinates[$i] && $value <= $coordinates[$i + 1]) {
-                    $count++;
-                }
-            }
-            $frequencies[] = $count;
-        }
-        return $frequencies;
+        return array_values($this->statisticRange());
+    }
+
+    /**
+     * Интервалы
+     *
+     * @return array
+     */
+    public function ranges()
+    {
+        return array_keys($this->statisticRange());
     }
 
     /**
@@ -187,6 +202,7 @@ class ModelingService
                 }
             }
             $frequencies[$coordinates[$i] . '-' . $coordinates[$i + 1]] = round($count / count($this->values), 1);
+            $this->frequenciesTimes[] = $count;
         }
         return $frequencies;
     }
@@ -273,15 +289,21 @@ class ModelingService
         return $result;
     }
 
-    public function isNormalLawByPirson()
+    /**
+     *  Соответствует теоритеческому нормальному распределению по согласию Пирсона?
+     *
+     * @param $alpha
+     * @return bool
+     */
+    public function isNormalLawByPirson($alpha)
     {
         $i = 0;
         $sum = 0;
-        $frequencies = $this->frequencies();
         foreach ($this->calculateProbabilities() as $key => $value) {
-            $sum += pow($frequencies[$i] - count($this->values) * $value, 2) / count($this->values) * $value;
+            $sum += pow($this->frequenciesTimes[$i] - count($this->values) * $value, 2) / count($this->values) * $value;
         }
-        $x2 = $sum;
+        $x = sqrt($sum);
+        return $x < $this->pirsonTable[(count($this->values) - 1) . '-' . $alpha];
     }
 
     /**

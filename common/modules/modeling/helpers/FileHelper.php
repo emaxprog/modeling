@@ -134,7 +134,7 @@ class FileHelper
                 $kvalues = $row;
                 continue;
             }
-            for ($i = 0; $i < 6; $i++) {
+            for ($i = 0; $i < 12; $i++) {
                 $data[$row[0] . '-' . (float)$kvalues[1 + $i]] = (float)$row[1 + $i];
             }
         }

@@ -79,10 +79,12 @@ function getMultipleInputField(randomName) {
 }
 
 $(document).ready(function () {
-    let randomValueForm = $('#random-value-form');
-    let addValueButton = randomValueForm.find('.add-value');
-    let addValueButtonForMultipleForm = randomValueForm.find('#random-value-form-multiple .add-value');
-    let formContainer = randomValueForm.find('.form-container');
+    let lab1Form = $('#lab1-form');
+    let lab4Form = $('#lab4-form');
+    let lab4Footer = $('.card-footer .stats');
+    let addValueButton = lab1Form.find('.add-value');
+    let addValueButtonForMultipleForm = lab1Form.find('#random-value-form-multiple .add-value');
+    let formContainer = lab1Form.find('.form-container');
     addValueButton.click(function () {
         formContainer.append(getInputField());
     });
@@ -97,7 +99,7 @@ $(document).ready(function () {
 
     $submitBtn = $('form .btn');
     $chartContainer = $('.chart__container');
-    $('form').submit(function (e) {
+    lab1Form.submit(function (e) {
         e.preventDefault();
         clearAlerts();
         $(this).find('+.col-md-12').remove();
@@ -138,4 +140,33 @@ $(document).ready(function () {
         return false;
     });
 
+    lab4Form.submit(function (e) {
+        e.preventDefault();
+        lab4Footer.html('');
+        clearAlerts();
+        $submitBtn.button('loading');
+        let form = $(this),
+            formAction = form.attr('action'),
+            formData = new FormData(form[0]),
+            formMethod = 'POST';
+        $.ajax({
+            type: formMethod,
+            url: formAction,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $submitBtn.button('reset');
+                lab4Footer.append(`<i class="material-icons">info</i> ${result}`);
+            },
+            error: function (msg) {
+                let error = msg.responseJSON.error;
+                if (error) {
+                    $('form .form-container').after(`<div class="alert alert-danger" role="alert">${error}</div>`);
+                }
+                $submitBtn.button('reset');
+            }
+        });
+        return false;
+    });
 });

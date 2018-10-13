@@ -11,7 +11,7 @@ namespace common\modules\modeling\controllers\modeling;
 use Yii;
 use yii\base\Action;
 use common\modules\modeling\helpers\FileHelper;
-use common\modules\modeling\forms\RandomValueForm;
+use common\modules\modeling\forms\Lab1Form;
 use common\modules\modeling\services\ModelingService;
 
 /**
@@ -32,7 +32,7 @@ class Lab1Action extends Action
      */
     public function run()
     {
-        $form = new RandomValueForm();
+        $form = new Lab1Form();
 
         if (Yii::$app->request->isPost) {
             if ($form->load(Yii::$app->request->post(), '')) {
@@ -44,9 +44,9 @@ class Lab1Action extends Action
                 return $this->controller->asJson([
                     'statisticRange' => $statisticRange,
                     'statisticFunction' => $this->service->statisticFunction(),
-                    'statisticRangeTable' =>$this->controller->renderPartial('lab1_table',[
-                        'ranges' => array_keys($statisticRange),
-                        'frequencies' => array_values($statisticRange)
+                    'statisticRangeTable' => $this->controller->renderPartial('lab1_table', [
+                        'ranges' => $this->service->ranges(),
+                        'frequencies' => $this->service->frequencies()
                     ])
                 ]);
             } catch (\Exception $e) {

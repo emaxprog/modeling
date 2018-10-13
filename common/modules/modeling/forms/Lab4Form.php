@@ -10,17 +10,22 @@ namespace common\modules\modeling\forms;
 
 use yii\base\Model;
 
-class RandomValueForm extends Model
+/**
+ * Class Lab4Form
+ * @package common\modules\modeling\forms
+ */
+class Lab4Form extends Model
 {
     /**
-     * @var array
+     * @var float
      */
-    public $values;
+    public $alpha;
 
     public function rules()
     {
         return [
-            [['values'], 'safe'],
+            [['alpha'],'required'],
+            [['alpha'], 'number'],
         ];
     }
 }
