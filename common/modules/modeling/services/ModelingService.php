@@ -82,7 +82,7 @@ class ModelingService
         foreach ($this->values as $value) {
             $sum += pow($value - $this->average(), 2);
         }
-        return $sum / (count($this->values) - 1);
+        return round($sum / (count($this->values) - 1), 2);
     }
 
     /**
@@ -133,7 +133,7 @@ class ModelingService
     public function coordinates()
     {
         $coordinates = [];
-        for ($i = 0; $i < count($this->values); $i++) {
+        for ($i = 0; $i <= count($this->values); $i++) {
             if (!$i) {
                 $coordinates[] = $this->min();
             } else {
@@ -182,7 +182,7 @@ class ModelingService
             }
             $count = 0;
             foreach ($this->values as $value) {
-                if ($value >= $coordinates[$i] && $value <= $coordinates[$i + 1]) {
+                if ($value > $coordinates[$i] && $value < $coordinates[$i + 1]) {
                     $count++;
                 }
             }
@@ -198,16 +198,17 @@ class ModelingService
      */
     public function statisticFunction()
     {
-        $values[] = $oldVal = 0;
-        $i = 0;
-        foreach ($this->statisticRange() as $key => $value) {
-            if (!$i++) {
+        $values = [];
+        $oldVal = $i = 0;
+        foreach ($this->statisticRange() as $value) {
+            if (!$i) {
                 $values[$this->values[$i]] = 0;
             } else {
-                $values[$this->values[$i]] = $oldVal + $this->statisticRange()[$key];
-                $oldVal = $values[$this->values[$i]];
+                $oldVal = $values[$this->values[$i]] = $oldVal + $value;
             }
+            $i++;
         }
+
         return $values;
     }
 
@@ -260,10 +261,10 @@ class ModelingService
         foreach ($this->coordinatesOfRanges() as $coordinates) {
             list($leftBorder, $rightBorder) = explode('-', $coordinates);
             $laplasValueRightBorder = abs(round(($rightBorder - $this->average()) / $this->dispersionEstimate(), 2));
-            $laplasValueRightBorder = is_int($laplasValueRightBorder) ? $laplasValueRightBorder . '.00' : (string)$laplasValueRightBorder;
+            $laplasValueRightBorder = is_int($laplasValueRightBorder) || !$laplasValueRightBorder ? $laplasValueRightBorder . '.00' : (string)$laplasValueRightBorder;
             $laplasValueRightBorder = strlen($laplasValueRightBorder) == 4 ? $laplasValueRightBorder : $laplasValueRightBorder . '0';
             $laplasValueLeftBorder = abs(round(($leftBorder - $this->average()) / $this->dispersionEstimate(), 2));
-            $laplasValueLeftBorder = is_int($laplasValueLeftBorder) ? $laplasValueLeftBorder . '.00' : (string)$laplasValueLeftBorder;
+            $laplasValueLeftBorder = is_int($laplasValueLeftBorder) || !$laplasValueLeftBorder ? $laplasValueLeftBorder . '.00' : (string)$laplasValueLeftBorder;
             $laplasValueLeftBorder = strlen($laplasValueLeftBorder) == 4 ? $laplasValueLeftBorder : $laplasValueLeftBorder . '0';
             $fb = $this->laplasTable[$laplasValueRightBorder < 5 ? $laplasValueRightBorder : 5];
             $fa = $this->laplasTable[$laplasValueLeftBorder < 5 ? $laplasValueLeftBorder : 5];
@@ -280,7 +281,7 @@ class ModelingService
         foreach ($this->calculateProbabilities() as $key => $value) {
             $sum += pow($frequencies[$i] - count($this->values) * $value, 2) / count($this->values) * $value;
         }
-        $x2= $sum;
+        $x2 = $sum;
     }
 
     /**

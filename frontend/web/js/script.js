@@ -60,12 +60,36 @@ function getInputField() {
                     </div>`;
 }
 
+
+function getMultipleInputField(randomName) {
+    return `<div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <input type="number" name="values[${randomName}][]" class="form-control" required>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="form-group">
+                           <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm delete-value">
+                                <i class="material-icons">close</i>
+                           </button>
+                        </div>
+                      </div>
+                    </div>`;
+}
+
 $(document).ready(function () {
     let randomValueForm = $('#random-value-form');
     let addValueButton = randomValueForm.find('.add-value');
+    let addValueButtonForMultipleForm = randomValueForm.find('#random-value-form-multiple .add-value');
     let formContainer = randomValueForm.find('.form-container');
     addValueButton.click(function () {
         formContainer.append(getInputField());
+    });
+    addValueButtonForMultipleForm.click(function () {
+        $randomValuesContainer = $(this).closest('.random-values-container').find('.random-values');
+        $randomName = $(this).data('randomValues');
+        $randomValuesContainer.append(getMultipleInputField($randomName));
     });
     $(document).on('click', '.delete-value', function () {
         $(this).closest('.row').remove();
