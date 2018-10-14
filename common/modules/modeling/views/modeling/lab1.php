@@ -6,7 +6,7 @@
                 <p class="card-category">ОЦЕНКА ЧИСЛОВЫХ ХАРАКТЕРИСТИК СЛУЧАЙНЫХ ВЕЛИЧИН И ПОСТРОЕНИЕ ЭМПИРИЧЕСКИХ ЗАКОНОВ ИХ РАСПРЕДЕЛЕНИЯ</p>
             </div>
             <div class="card-body">
-                <form id="lab1-form" action="<?= \yii\helpers\Url::to(['/lab1']) ?>" method="post" enctype='multipart/form-data'>
+                <form id="lab1-form" action="<?= \yii\helpers\Url::to(['/lab1']) ?>" method="post">
                     <div class="form-container form-horizontal"></div>
                     <div class="button-container">
                         <button type="button" class="btn btn-info add-value">Добавить значение</button>

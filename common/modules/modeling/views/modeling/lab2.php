@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-header card-header-primary">
                 <h4 class="card-title">Лабораторная работа №2</h4>
-                <p class="card-category">СТАТИСТИЧЕСКАЯ ПРОВЕРКА ГЕПОТЕЗЫ О ЗАКОНЕ РАСПРЕДЕЛЕНИЯ СЛУЧАЙНОЙ ВЕЛИЧИНЫ С ПОМОЩЬЮ КОЭФФИЦИЕНТА АСИМЕТРИИ А и ЭКСЦЕССА Е</p>
+                <p class="card-category">СТАТИСТИЧЕСКАЯ ПРОВЕРКА ГЕПОТЕЗЫ О ЗАКОНЕ РАСПРЕДЕЛЕНИЯ СЛУЧАЙНОЙ ВЕЛИЧИНЫ С ПОМОЩЬЮ КОЭФФИЦИЕНТА АСИМЕТРИИ А И ЭКСЦЕССА Е</p>
             </div>
             <div class="card-body">
                 <div class="col-md-12">

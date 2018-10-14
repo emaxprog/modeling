@@ -1,6 +1,6 @@
 <?php
 /**
- * Файл класса IndexAction
+ * Файл класса Lab3Action
  *
  * @copyright Copyright (c) 2018, Oleg Chulakov Studio
  * @link http://chulakov.com/
@@ -15,7 +15,8 @@ use common\modules\modeling\helpers\FileHelper;
 use common\modules\modeling\services\ModelingService;
 
 /**
- * Класс действие для получения списка советов
+ * Class Lab3Action
+ * @package common\modules\modeling\controllers\modeling
  */
 class Lab3Action extends Action
 {

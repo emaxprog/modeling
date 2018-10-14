@@ -93,12 +93,14 @@ class ModelingService
     /**
      * Оценка дисперсии
      *
+     * @param array $values
      * @return float|int
      */
-    public function dispersionEstimate()
+    public function dispersionEstimate($values = null)
     {
         $sum = 0;
-        foreach ($this->values as $value) {
+        $values = $values ?: $this->values;
+        foreach ($values as $value) {
             $sum += pow($value - $this->average(), 2);
         }
         return round($sum / (count($this->values) - 1), 2);
@@ -304,6 +306,29 @@ class ModelingService
         }
         $x = sqrt($sum);
         return $x < $this->pirsonTable[(count($this->values) - 1) . '-' . $alpha];
+    }
+
+    /**
+     *  Две дисперсии равны?
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function isDispersionEqual()
+    {
+        $valuesX = $this->values['randomValue1'];
+        $valuesY = $this->values['randomValue2'];
+        $dispersionX = $this->dispersionEstimate($valuesX);
+        $dispersionY = $this->dispersionEstimate($valuesY);
+
+        $k1 = count($valuesX) - 1;
+        $k2 = count($valuesY) - 1;
+        if (!($k1 && $k2)) {
+            throw  new \Exception('Количество значений случайных величин должно быть больше.');
+        }
+        $f = round($dispersionX > $dispersionY ? $dispersionX / $dispersionY : $dispersionY / $dispersionX, 2);
+
+        return $f < $this->fisherTable[$k2 . '-' . $k1];
     }
 
     /**

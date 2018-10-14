@@ -1,6 +1,6 @@
 <?php
 /**
- * Файл класса IndexAction
+ * Файл класса Class Lab1Action
  *
  * @copyright Copyright (c) 2018, Oleg Chulakov Studio
  * @link http://chulakov.com/

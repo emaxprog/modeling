@@ -1,6 +1,6 @@
 <?php
 /**
- * Файл класса IndexAction
+ * Файл класса Lab5Action
  *
  * @copyright Copyright (c) 2018, Oleg Chulakov Studio
  * @link http://chulakov.com/
@@ -23,39 +23,25 @@ class Lab5Action extends Action
     /**
      * @var ModelingService
      */
-    protected $service1;
+    protected $service;
 
     /**
-     * @var ModelingService
-     */
-    protected $service2;
-
-    /**
-     * Действие для вывода Лабораторной работы №1
+     * Действие для вывода Лабораторной работы №5
      *
      * @return string|\yii\web\Response
+     * @throws \Exception
      */
     public function run()
     {
-        $form1 = new Lab1Form();
-        $form2 = new Lab1Form();
+        $form = new Lab1Form();
 
         if (Yii::$app->request->isPost) {
             $postData = Yii::$app->request->post();
-            if ($form1->load($postData, 'form1') && $form2->load($postData, 'form2')) {
-                $this->service1 = new ModelingService($form1->values);
-                $this->service2 = new ModelingService($form2->values);
+            if ($form->load($postData, '')) {
+                $this->service = new ModelingService($form->values, null, null, FileHelper::geFisherTableByAlpha($postData['alpha']));
             }
             try {
-                $statisticRange = $this->service1->statisticRange();
-                return $this->controller->asJson([
-                    'statisticRange' => $statisticRange,
-                    'statisticFunction' => $this->service->statisticFunction(),
-                    'statisticRangeTable' => $this->controller->renderPartial('lab1_table', [
-                        'ranges' => array_keys($statisticRange),
-                        'frequencies' => array_values($statisticRange)
-                    ])
-                ]);
+                return $this->controller->asJson($this->service->isDispersionEqual() ? 'Дисперсии РАВНЫ' : 'Дисперсии НЕ РАВНЫ');
             } catch (\Exception $e) {
                 Yii::$app->response->statusCode = 403;
                 return $this->controller->asJson(['error' => $e->getMessage()]);
@@ -63,8 +49,7 @@ class Lab5Action extends Action
         }
 
         return $this->controller->render('lab5', [
-            'form1' => $form1,
-            'form2' => $form2
+            'form' => $form,
         ]);
     }
 }
