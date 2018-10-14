@@ -2,8 +2,8 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">Лабораторная работа №5</h4>
-                <p class="card-category">СТАТИСТИЧЕСКАЯ ПРОВЕРКА ГИПОТЕЗЫ О РАВЕНСТВЕ ДИСПЕРСИЙ ДВУХ ГЕНЕРАЛЬНЫХ СОВОКУПНОСТЕЙ</p>
+                <h4 class="card-title">Лабораторная работа №6</h4>
+                <p class="card-category">КОРРЕЛЯЦИОННЫЙ АНАЛИЗ</p>
             </div>
             <div class="card-body">
                 <form id="lab6-form" action="<?= \yii\helpers\Url::to(['/lab6']) ?>" method="post">
