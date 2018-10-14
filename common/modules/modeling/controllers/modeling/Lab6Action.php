@@ -1,6 +1,6 @@
 <?php
 /**
- * Файл класса Lab5Action
+ * Файл класса Lab6Action
  *
  * @copyright Copyright (c) 2018, Oleg Chulakov Studio
  * @link http://chulakov.com/
@@ -10,15 +10,14 @@ namespace common\modules\modeling\controllers\modeling;
 
 use Yii;
 use yii\base\Action;
-use common\modules\modeling\helpers\FileHelper;
-use common\modules\modeling\forms\Lab5Form;
+use common\modules\modeling\forms\Lab6Form;
 use common\modules\modeling\services\ModelingService;
 
 /**
  * Class Lab5Action
  * @package common\modules\modeling\controllers\modeling
  */
-class Lab5Action extends Action
+class Lab6Action extends Action
 {
     /**
      * @var ModelingService
@@ -33,21 +32,21 @@ class Lab5Action extends Action
      */
     public function run()
     {
-        $form = new Lab5Form();
+        $form = new Lab6Form();
 
         if (Yii::$app->request->isPost) {
             if ($form->load(Yii::$app->request->post(), '')) {
-                $this->service = new ModelingService($form->values, null, null, FileHelper::geFisherTableByAlpha($form->alpha));
+                $this->service = new ModelingService($form->values);
             }
             try {
-                return $this->controller->asJson($this->service->isDispersionEqual() ? 'Дисперсии РАВНЫ' : 'Дисперсии НЕ РАВНЫ');
+                return $this->controller->renderPartial('lab6_table', ['coefficients' => $this->service->pairCorrelationCoefficients()]);
             } catch (\Exception $e) {
                 Yii::$app->response->statusCode = 403;
                 return $this->controller->asJson(['error' => $e->getMessage()]);
             }
         }
 
-        return $this->controller->render('lab5', [
+        return $this->controller->render('lab6', [
             'form' => $form,
         ]);
     }

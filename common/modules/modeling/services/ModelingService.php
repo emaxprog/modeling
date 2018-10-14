@@ -36,11 +36,15 @@ class ModelingService
     protected $pirsonTable;
 
     /**
+     * Таблица Лапласа
+     *
      * @var array
      */
     protected $laplasTable;
 
     /**
+     * Таблица Фишера
+     *
      * @var array
      */
     protected $fisherTable;
@@ -73,21 +77,24 @@ class ModelingService
     /**
      * Выборочное среднее или оценка математического ожидания
      *
+     * @param array $values
      * @return float|int
      */
-    public function average()
+    public function average($values = null)
     {
-        return array_sum($this->values) / count($this->values);
+        $values = $values ?: $this->values;
+        return array_sum($values) / count($values);
     }
 
     /**
      * Среднее квадратическое отклонение
      *
+     * @param $values
      * @return float
      */
-    public function standardDeviation()
+    public function standardDeviation($values = null)
     {
-        return sqrt($this->dispersionEstimate());
+        return sqrt($this->dispersionEstimate($values));
     }
 
     /**
@@ -329,6 +336,47 @@ class ModelingService
         $f = round($dispersionX > $dispersionY ? $dispersionX / $dispersionY : $dispersionY / $dispersionX, 2);
 
         return $f < $this->fisherTable[$k2 . '-' . $k1];
+    }
+
+    /**
+     * Коэффициенты парных корреляций
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function pairCorrelationCoefficients()
+    {
+        $valuesX = $this->values['randomValue1'];
+        $valuesY = $this->values['randomValue2'];
+        $valuesZ = $this->values['randomValue3'];
+        $n = count($valuesX);
+        if ($n == 1) {
+            throw  new \Exception('Количество значений случайных величин должно быть больше.');
+        }
+        return [
+            'x-y' => round($this->sumPair($valuesX, $valuesY) / (($n - 1) * $this->standardDeviation($valuesX) * $this->standardDeviation($valuesY)), 2),
+            'x-z' => round($this->sumPair($valuesX, $valuesZ) / (($n - 1) * $this->standardDeviation($valuesX) * $this->standardDeviation($valuesZ)), 2),
+            'y-z' => round($this->sumPair($valuesY, $valuesZ) / (($n - 1) * $this->standardDeviation($valuesY) * $this->standardDeviation($valuesZ)), 2),
+        ];
+    }
+
+    /**
+     * Получить сумму парных величин
+     *
+     * @param $valuesX
+     * @param $valuesY
+     * @return float|int
+     */
+    public function sumPair($valuesX, $valuesY)
+    {
+        $sum = 0;
+        $n = count($valuesX);
+        $averageX = $this->average($valuesX);
+        $averageY = $this->average($valuesY);
+        for ($i = 0; $i < $n; $i++) {
+            $sum += ($valuesX[$i] - $averageX) * ($valuesY[$i] - $averageY);
+        }
+        return $sum;
     }
 
     /**
