@@ -224,14 +224,10 @@ class ModelingService
     public function statisticFunction()
     {
         $values = [];
-        $oldVal = $i = 0;
+        $oldVal = 0;
+        $values[1] = 0;
         foreach ($this->statisticRange() as $value) {
-            if (!$i) {
-                $values[$this->values[$i]] = 0;
-            } else {
-                $oldVal = $values[$this->values[$i]] = $oldVal + $value;
-            }
-            $i++;
+            $oldVal = $values[] = $oldVal + $value;
         }
 
         return $values;

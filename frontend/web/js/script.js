@@ -21,7 +21,7 @@ function drawStatisticRange(data) {
 
 function drawStatisticFunction(data) {
     let dataTable = new google.visualization.DataTable();
-    dataTable.addColumn('string', 'Значение случайной величины');
+    dataTable.addColumn('string', 'Номер опыта');
     dataTable.addColumn('number', 'Значение функции');
     dataTable.addRows(data);
     let options = {
@@ -30,7 +30,7 @@ function drawStatisticFunction(data) {
             title: 'Значение функции'
         },
         hAxis: {
-            title: 'Значение случайной величины'
+            title: 'Номер опыта'
         },
         curveType: 'function',
     };
